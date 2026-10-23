@@ -1,142 +1,148 @@
-/* Reseta margens padrão e define o tipo de fonte */
+/* Configurações gerais da página */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Fundo geral escuro e estilos básicos */
 body {
-    background-color: #0f0f14;
-    color: #e0e0e0;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
+  background-color: #f4f5f8;
+  color: #1a1a1a;
+  padding-bottom: 40px;
 }
 
-/* Container centralizado limitando a largura */
-.container {
-    width: 100%;
-    max-width: 1100px;
+/* Cabeçalho na cor principal (Preto) com detalhes */
+.header {
+  background-color: #0d0d0d;
+  color: #ffffff;
+  text-align: center;
+  padding: 30px 20px;
+  border-bottom: 4px solid #8a2be2; /* Roxo brilhante na borda inferior */
 }
 
-/* Cabeçalho estilizado com tom roxo */
-.cabecalho {
-    text-align: center;
-    padding: 20px;
-    background-color: #1a1a24;
-    border-radius: 12px;
-    border: 2px solid #8a2be2;
-    margin-bottom: 25px;
-    box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
-}
-
-.cabecalho h1 {
-    color: #a855f7;
-    font-size: 2rem;
-    margin-bottom: 5px;
+.header h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
 }
 
 .subtitulo {
-    color: #a1a1aa;
-    font-size: 1rem;
+  font-size: 1.1rem;
+  color: #a855f7; /* Roxo brilhante para o subtítulo */
+  font-weight: 500;
 }
 
-/* Organização dos Cards de Resumo */
-.cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
-    margin-bottom: 30px;
+/* Layout do conteúdo principal */
+.container {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 0 20px;
 }
 
-/* Estilo dos Cards com bordas arredondadas e detalhe roxo brilhante */
+/* Grade de cards de resumo */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 35px;
+}
+
+/* Estilo do card individual */
 .card {
-    background-color: #12121a;
-    padding: 18px;
-    border-radius: 12px;
-    /* Borda e sombra com roxo bem brilhante */
-    border: 2px solid #a855f7;
-    box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
-    text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  /* Sombreado na parte esquerda do fundo */
+  box-shadow: -6px 4px 12px rgba(138, 43, 226, 0.15);
+  border-left: 4px solid #8a2be2;
+  transition: transform 0.2s ease;
 }
 
 .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.8);
+  transform: translateY(-3px);
 }
 
 .card h3 {
-    font-size: 0.9rem;
-    color: #c084fc;
-    margin-bottom: 10px;
-    text-transform: uppercase;
+  font-size: 0.9rem;
+  color: #555555;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
 }
 
-.valor-card {
+.card-valor {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #0d0d0d;
+}
+
+.card-status {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #8a2be2;
+  font-weight: 600;
+}
+
+/* Tabela de disciplinas e notas */
+.tabela-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow-x: auto; /* Permite rolar a tabela em telas muito pequenas */
+  box-shadow: -6px 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  min-width: 650px;
+}
+
+thead {
+  background-color: #0d0d0d;
+  color: #ffffff;
+}
+
+th {
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eeeeee;
+  font-size: 0.95rem;
+}
+
+tbody tr:hover {
+  background-color: #f9f5ff; /* Destaque sutil ao passar o mouse */
+}
+
+/* Estilos visuais para as situações */
+.status-bom {
+  color: #15803d;
+  font-weight: 600;
+}
+
+.status-atencao {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.status-indisponivel {
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Ajustes para telas pequenas de celular */
+@media (max-width: 600px) {
+  .header h1 {
     font-size: 1.6rem;
-    font-weight: bold;
-    color: #ffffff;
-}
-
-.subtexto-card {
-    display: block;
-    font-size: 0.75rem;
-    color: #4ade80;
-    margin-top: 5px;
-}
-
-/* Seção e Tabela Responsiva */
-.tabela-secao {
-    background-color: #12121a;
-    border-radius: 12px;
-    padding: 20px;
-    border: 1px solid #27272a;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-}
-
-/* Permite rolagem lateral na tabela se a tela do celular for pequena */
-.tabela-wrapper {
-    overflow-x: auto;
-}
-
-.tabela-boletim {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-    min-width: 650px;
-}
-
-.tabela-boletim th, 
-.tabela-boletim td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #27272a;
-}
-
-.tabela-boletim th {
-    background-color: #1e1e2d;
-    color: #c084fc;
-    font-weight: 600;
-}
-
-.tabela-boletim tbody tr:hover {
-    background-color: #1a1a28;
-}
-
-/* Estilos de destaques para situações */
-.situacao-bom {
-    color: #4ade80;
-    font-weight: bold;
-}
-
-.situacao-atencao {
-    color: #f87171;
-    font-weight: bold;
-}
-
-.situacao-indisponivel {
-    color: #a1a1aa;
-    font-style: italic;
+  }
+  
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
 }
