@@ -69,7 +69,7 @@ function validarFaltaDigitada(str) {
   if (texto === "") return { valida: false, valor: null };
 
   // Deve conter apenas dígitos inteiros
-  if (!/^\d+\$/.test(texto)) {
+  if (!/^\d+$/.test(texto)) {
     return { valida: false, valor: null };
   }
 
@@ -207,4 +207,176 @@ function renderizarBoletim() {
     if (Array.isArray(item.faltas)) {
       f1 = item.faltas[0] || 0;
       f2 = item.faltas[1] || 0;
-      f
+      f3 = item.faltas[2] || 0;
+    }
+    const totalFaltasDisciplina = f1 + f2 + f3;
+    totalFaltasGeral += totalFaltasDisciplina;
+
+    let situacaoTexto = "";
+    let classeSituacao = "";
+
+    if (media === null) {
+      situacaoTexto = "Nota ainda não disponível";
+      classeSituacao = "status-indisponivel";
+    } else if (media >= 6.0) {
+      situacaoTexto = "Bom desempenho";
+      classeSituacao = "status-bom";
+      disciplinasBomDesempenho++;
+      somaMediasGerais += media;
+      qtdDisciplinasComMedia++;
+    } else {
+      situacaoTexto = "Atenção";
+      classeSituacao = "status-atencao";
+      disciplinasAtencao++;
+      somaMediasGerais += media;
+      qtdDisciplinasComMedia++;
+    }
+
+    const tr = document.createElement("tr");
+
+    if (modoEdicao) {
+      // MODO EDIÇÃO: Formulários nos campos
+      const valT1 = n1 !== null ? String(n1).replace(".", ",") : "";
+      const valT2 = n2 !== null ? String(n2).replace(".", ",") : "";
+      const valT3 = n3 !== null ? String(n3).replace(".", ",") : "";
+
+      tr.innerHTML = `
+        <td><strong id="disc-nome-${idx}"></strong></td>
+        <td><input type="text" class="input-nota" id="input-t1-${idx}" value="${valT1}"></td>
+        <td><input type="text" class="input-nota" id="input-t2-${idx}" value="${valT2}"></td>
+        <td><input type="text" class="input-nota" id="input-t3-${idx}" value="${valT3}"></td>
+        <td><strong>${formatarNotaParaExibicao(media)}</strong></td>
+        <td>
+          <div class="grupo-faltas-edit">
+            <input type="text" class="input-falta" id="input-f1-${idx}" value="${f1}">
+            <input type="text" class="input-falta" id="input-f2-${idx}" value="${f2}">
+            <input type="text" class="input-falta" id="input-f3-${idx}" value="${f3}">
+          </div>
+        </td>
+        <td class="${classeSituacao}">${situacaoTexto}</td>
+      `;
+      tabelaCorpo.appendChild(tr);
+      // Inserção segura do nome da disciplina via textContent (DOM Security)
+      document.getElementById(`disc-nome-${idx}`).textContent = item.disciplina;
+
+    } else {
+      // MODO VISUALIZAÇÃO
+      tr.innerHTML = `
+        <td><strong id="disc-nome-${idx}"></strong></td>
+        <td>${formatarNotaParaExibicao(n1)}</td>
+        <td>${formatarNotaParaExibicao(n2)}</td>
+        <td>${formatarNotaParaExibicao(n3)}</td>
+        <td><strong>${formatarNotaParaExibicao(media)}</strong></td>
+        <td>${totalFaltasDisciplina} (${f1}/${f2}/${f3})</td>
+        <td class="${classeSituacao}">${situacaoTexto}</td>
+      `;
+      tabelaCorpo.appendChild(tr);
+      document.getElementById(`disc-nome-${idx}`).textContent = item.disciplina;
+    }
+  });
+
+  // Atualização dos Cards de Resumo
+  const mediaGeralCalculada = qtdDisciplinasComMedia > 0 
+    ? (somaMediasGerais / qtdDisciplinasComMedia).toFixed(1).replace(".", ",") 
+    : "—";
+
+  document.getElementById("media-geral").innerText = mediaGeralCalculada;
+  document.getElementById("total-faltas").innerText = totalFaltasGeral;
+  document.getElementById("bom-desempenho").innerText = disciplinasBomDesempenho;
+  document.getElementById("precisa-atencao").innerText = disciplinasAtencao;
+
+  // NOTA SOBRE FREQUÊNCIA: Percentual fictício/demonstrativo mantido conforme regras
+  document.getElementById("frequencia").innerText = "92%";
+}
+
+// SALVAR ALTERAÇÕES NA API
+async function salvarAlteracoes() {
+  const msgSalvar = document.getElementById("mensagem-salvar");
+  msgSalvar.innerText = "";
+  msgSalvar.className = "mensagem-status";
+
+  let existemErros = false;
+  const novasDisciplinas = [];
+
+  // Validação dos campos digitados
+  disciplinasAtuais.forEach((item, idx) => {
+    const elT1 = document.getElementById(`input-t1-${idx}`);
+    const elT2 = document.getElementById(`input-t2-${idx}`);
+    const elT3 = document.getElementById(`input-t3-${idx}`);
+    const elF1 = document.getElementById(`input-f1-${idx}`);
+    const elF2 = document.getElementById(`input-f2-${idx}`);
+    const elF3 = document.getElementById(`input-f3-${idx}`);
+
+    [elT1, elT2, elT3, elF1, elF2, elF3].forEach(el => el && el.classList.remove("input-invalido"));
+
+    const resT1 = validarNotaDigitada(elT1.value);
+    const resT2 = validarNotaDigitada(elT2.value);
+    const resT3 = validarNotaDigitada(elT3.value);
+
+    const resF1 = validarFaltaDigitada(elF1.value);
+    const resF2 = validarFaltaDigitada(elF2.value);
+    const resF3 = validarFaltaDigitada(elF3.value);
+
+    if (!resT1.valida) { elT1.classList.add("input-invalido"); existemErros = true; }
+    if (!resT2.valida) { elT2.classList.add("input-invalido"); existemErros = true; }
+    if (!resT3.valida) { elT3.classList.add("input-invalido"); existemErros = true; }
+
+    if (!resF1.valida) { elF1.classList.add("input-invalido"); existemErros = true; }
+    if (!resF2.valida) { elF2.classList.add("input-invalido"); existemErros = true; }
+    if (!resF3.valida) { elF3.classList.add("input-invalido"); existemErros = true; }
+
+    if (!existemErros) {
+      novasDisciplinas.push({
+        disciplina: item.disciplina,
+        tri1: resT1.valor,
+        tri2: resT2.valor,
+        tri3: resT3.valor,
+        faltas: [resF1.valor, resF2.valor, resF3.valor]
+      });
+    }
+  });
+
+  if (existemErros) {
+    msgSalvar.innerText = "Existem valores inválidos destacados em vermelho. Corrija para salvar.";
+    msgSalvar.className = "mensagem-status erro";
+    return;
+  }
+
+  msgSalvar.innerText = "Salvando...";
+  msgSalvar.className = "mensagem-status info";
+
+  try {
+    const resposta = await fetch(`${CONFIG_ALUNO.apiUrl}/api/v1/boletins/salvar`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        turma: CONFIG_ALUNO.turma,
+        numero_chamada: CONFIG_ALUNO.numeroChamada,
+        pin: pinSessao,
+        dados: {
+          disciplinas: novasDisciplinas
+        }
+      })
+    });
+
+    if (!resposta.ok) {
+      msgSalvar.innerText = "Erro ao salvar os dados no servidor. Tente novamente.";
+      msgSalvar.className = "mensagem-status erro";
+      return;
+    }
+
+    disciplinasAtuais = novasDisciplinas;
+    modoEdicao = false;
+    document.getElementById("btn-alternar-edicao").innerText = "Alterar dados";
+    document.getElementById("btn-salvar").style.display = "none";
+
+    msgSalvar.innerText = "Dados salvos com sucesso.";
+    msgSalvar.className = "mensagem-status sucesso";
+
+    renderizarBoletim();
+
+  } catch (erro) {
+    msgSalvar.innerText = "Falha na conexão ao salvar. Tente novamente.";
+    msgSalvar.className = "mensagem-status erro";
+  }
+}
