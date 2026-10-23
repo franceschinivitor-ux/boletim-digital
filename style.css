@@ -39,6 +39,102 @@ body {
   padding: 0 20px;
 }
 
+/* Tela de Login / Acesso PIN */
+.card-login {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 420px;
+  margin: 40px auto;
+  box-shadow: -6px 4px 12px rgba(138, 43, 226, 0.15);
+  border-left: 4px solid #8a2be2;
+  text-align: center;
+}
+
+.card-login h2 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #0d0d0d;
+}
+
+.login-info {
+  font-size: 0.95rem;
+  color: #555555;
+  margin-bottom: 20px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.login-form label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333333;
+}
+
+.login-form input {
+  width: 100%;
+  max-width: 200px;
+  padding: 10px;
+  border: 2px solid #dddddd;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 1.1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.login-form input:focus {
+  border-color: #8a2be2;
+}
+
+.login-form button, .painel-acoes button {
+  background-color: #8a2be2;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-form button:hover, .painel-acoes button:hover {
+  background-color: #7222bd;
+}
+
+/* Painel de Ações superiores */
+.painel-acoes {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.mensagem-status {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.mensagem-status.erro {
+  color: #b91c1c;
+}
+
+.mensagem-status.sucesso {
+  color: #15803d;
+}
+
+.mensagem-status.info {
+  color: #8a2be2;
+}
+
 /* Grade de cards de resumo */
 .cards-grid {
   display: grid;
@@ -120,6 +216,31 @@ tbody tr:hover {
   background-color: #f9f5ff; /* Destaque sutil ao passar o mouse */
 }
 
+/* Inputs da tabela durante edição */
+.input-nota, .input-falta {
+  width: 55px;
+  padding: 6px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.input-falta {
+  width: 40px;
+}
+
+.input-invalido {
+  border-color: #b91c1c !important;
+  background-color: #fef2f2;
+}
+
+.grupo-faltas-edit {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
 /* Estilos visuais para as situações */
 .status-bom {
   color: #15803d;
@@ -127,22 +248,4 @@ tbody tr:hover {
 }
 
 .status-atencao {
-  color: #b91c1c;
-  font-weight: 600;
-}
-
-.status-indisponivel {
-  color: #6b7280;
-  font-style: italic;
-}
-
-/* Ajustes para telas pequenas de celular */
-@media (max-width: 600px) {
-  .header h1 {
-    font-size: 1.6rem;
-  }
-  
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
-}
+  color:
