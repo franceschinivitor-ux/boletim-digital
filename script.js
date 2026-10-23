@@ -2,7 +2,7 @@
 const CONFIG_ALUNO = {
   turma: "8C",
   numeroChamada: 25,
-  apiUrl: "https://boletim-api.profbt.com.br"
+  apiUrl: "[https://boletim-api.profbt.com.br](https://boletim-api.profbt.com.br)"
 };
 
 // DADOS FICTÍCIOS PADRONIZADOS BASE
